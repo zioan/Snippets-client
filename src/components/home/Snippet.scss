@@ -10,21 +10,6 @@
     margin-bottom: 1rem;
   }
 
-  .code {
-    padding: 1rem;
-    border-radius: 10px;
-    font-family: monospace;
-    font-size: 1.3rem;
-    background: var(--dark-color);
-
-    overflow-x: auto;
-    white-space: pre-wrap;
-    white-space: -moz-pre-wrap;
-    white-space: -pre-wrap;
-    white-space: -o-pre-wrap;
-    // word-wrap: break-word;
-  }
-
   .btn-edit,
   .btn-delete {
     @include btn();

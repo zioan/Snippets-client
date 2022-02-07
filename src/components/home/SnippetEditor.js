@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./SnippetEditor.scss";
 
+import CodeMirror from "@uiw/react-codemirror";
+import "codemirror/theme/dracula.css";
+
 function SnippetEditor({ getSnippets, setSnippetEditorOpen, editSnippetData }) {
   const [editorTitle, setEditorTitle] = useState("");
   const [editorDescription, setEditorDescription] = useState("");
@@ -64,10 +67,19 @@ function SnippetEditor({ getSnippets, setSnippetEditorOpen, editSnippetData }) {
           onChange={(e) => setEditorDescription(e.target.value)}
         />
         <label htmlFor="editor-code">Code</label>
-        <textarea
+        {/* <textarea
           id="editor-code"
           value={editorCode}
           onChange={(e) => setEditorCode(e.target.value)}
+        /> */}
+        <CodeMirror
+          id="editor-code"
+          value={editorCode}
+          height="200px"
+          options={{ theme: "dracula", mode: "jsx" }}
+          onChange={(editor) => setEditorCode(editor.getValue())}
+          // onChange={(e) => console.log(e.target.value)}
+          // onChange={(e) => setEditorCode(e.target.value)}
         />
         <button className="btn-save" type="submit">
           Save
