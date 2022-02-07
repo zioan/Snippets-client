@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./Navbar.scss";
 
 function Navbar() {
   return (
@@ -7,8 +8,10 @@ function Navbar() {
       <Link to="/">
         <h1>Snippet manager</h1>
       </Link>
-      <Link to="/login">Log in</Link>
-      <Link to="/register">Register</Link>
+      <div>
+        <Link to="/login">Log in</Link>
+        <Link to="/register">Register</Link>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,8 @@
+@import "../../style/mixins.scss";
+
+.home {
+  .btn-editor-toggler {
+    @include btn();
+    background: var(--light-color);
+  }
+}

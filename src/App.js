@@ -1,8 +1,13 @@
 import React from "react";
 import Router from "./Router";
+import "./style/index.scss";
 
 const App = () => {
-  return <Router />;
+  return (
+    <div className="container">
+      <Router />
+    </div>
+  );
 };
 
 export default App;

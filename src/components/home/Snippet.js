@@ -1,5 +1,6 @@
 import axios from "axios";
 import React from "react";
+import "./Snippet.scss";
 
 function Snippet({ snippet, getSnippets, editSnippet }) {
   async function deleteSnippet() {
@@ -9,15 +10,21 @@ function Snippet({ snippet, getSnippets, editSnippet }) {
 
   return (
     <div className="snippet">
-      {snippet.title && <h2>{snippet.title}</h2>}
-      {snippet.description && <h3>{snippet.description}</h3>}
+      {snippet.title && <h2 className="title">{snippet.title}</h2>}
+      {snippet.description && (
+        <h4 className="description">{snippet.description}</h4>
+      )}
       {snippet.code && (
-        <pre>
+        <pre className="code">
           <code>{snippet.code}</code>
         </pre>
       )}
-      <button onClick={() => editSnippet(snippet)}>Edit</button>
-      <button onClick={deleteSnippet}>Delete</button>
+      <button className="btn-edit" onClick={() => editSnippet(snippet)}>
+        Edit
+      </button>
+      <button className="btn-delete" onClick={deleteSnippet}>
+        Delete
+      </button>
     </div>
   );
 }
