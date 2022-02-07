@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Snippet from "./Snippet";
+import SnippetEditor from "./SnippetEditor";
 
 function Home() {
   const [snippets, setSnippets] = useState([]);
-  const [newSnippetEditorOpen, setNewSnippetEditorOpen] = useState(false);
-  const [editorTitle, setEditorTitle] = useState("");
-  const [editorDescription, setEditorDescription] = useState("");
-  const [editorCode, setEditorCode] = useState("");
+  const [snippetEditorOpen, setSnippetEditorOpen] = useState(false);
+  const [editSnippetData, setEditSnippetData] = useState(null);
 
   useEffect(() => {
     getSnippets();
@@ -18,6 +17,11 @@ function Home() {
     setSnippets(snippetsRes.data);
   }
 
+  function editSnippet(snippetData) {
+    setEditSnippetData(snippetData);
+    setSnippetEditorOpen(true);
+  }
+
   //sort snippets based on the updatedAt DB entry
   function renderSnippets() {
     let sortedSnippets = [...snippets];
@@ -26,68 +30,28 @@ function Home() {
     });
 
     return sortedSnippets.map((snippet, index) => {
-      return <Snippet snippet={snippet} key={index} />;
+      return (
+        <Snippet
+          key={index}
+          snippet={snippet}
+          getSnippets={getSnippets}
+          editSnippet={editSnippet}
+        />
+      );
     });
-  }
-
-  async function saveSnippet(e) {
-    e.preventDefault();
-
-    const snippetData = {
-      title: editorTitle ? editorTitle : undefined,
-      description: editorDescription ? editorDescription : undefined,
-      code: editorCode ? editorCode : undefined,
-    };
-
-    await axios.post("http://localhost:5000/snippet/", snippetData);
-
-    getSnippets();
-    closeEditor();
-  }
-
-  function closeEditor() {
-    setNewSnippetEditorOpen(false);
-    setEditorTitle("");
-    setEditorDescription("");
-    setEditorCode("");
   }
 
   return (
     <div className="home">
-      {!newSnippetEditorOpen && (
-        <button onClick={() => setNewSnippetEditorOpen(true)}>
-          Add snippet
-        </button>
+      {!snippetEditorOpen && (
+        <button onClick={() => setSnippetEditorOpen(true)}>Add snippet</button>
       )}
-      {newSnippetEditorOpen && (
-        <div className="snippet-editor">
-          <form onSubmit={saveSnippet}>
-            <label htmlFor="editor-title">Title</label>
-            <input
-              id="editor-title"
-              type="text"
-              value={editorTitle}
-              onChange={(e) => setEditorTitle(e.target.value)}
-            />
-            <label htmlFor="editor-description">Description</label>
-            <input
-              id="editor-description"
-              type="text"
-              value={editorDescription}
-              onChange={(e) => setEditorDescription(e.target.value)}
-            />
-            <label htmlFor="editor-code">Code</label>
-            <textarea
-              id="editor-code"
-              value={editorCode}
-              onChange={(e) => setEditorCode(e.target.value)}
-            />
-            <button type="submit">Save snippet</button>
-            <button type="button" onClick={closeEditor}>
-              Cancel
-            </button>
-          </form>
-        </div>
+      {snippetEditorOpen && (
+        <SnippetEditor
+          setSnippetEditorOpen={setSnippetEditorOpen}
+          getSnippets={getSnippets}
+          editSnippetData={editSnippetData}
+        />
       )}
       {renderSnippets()}
     </div>
