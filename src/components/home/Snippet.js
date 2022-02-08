@@ -1,8 +1,7 @@
 import axios from "axios";
 import React from "react";
 import "./Snippet.scss";
-import CodeMirror from "@uiw/react-codemirror";
-import "codemirror/theme/dracula.css";
+import CodeEditor from "@uiw/react-textarea-code-editor";
 
 function Snippet({ snippet, getSnippets, editSnippet }) {
   async function deleteSnippet() {
@@ -18,10 +17,18 @@ function Snippet({ snippet, getSnippets, editSnippet }) {
       )}
       {snippet.code && (
         <div className="code">
-          <CodeMirror
+          <CodeEditor
             value={snippet.code}
-            height="200px"
-            options={{ theme: "dracula", mode: "jsx" }}
+            language="js"
+            placeholder="Please enter your code."
+            padding={15}
+            style={{
+              fontSize: 16,
+              color: "#dddddd",
+              backgroundColor: "#222",
+              fontFamily:
+                "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+            }}
           />
         </div>
       )}

@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./SnippetEditor.scss";
 
-import CodeMirror from "@uiw/react-codemirror";
-import "codemirror/theme/dracula.css";
+// import CodeMirror from "@uiw/react-codemirror";
+// import "codemirror/theme/dracula.css";
+import CodeEditor from "@uiw/react-textarea-code-editor";
 
 function SnippetEditor({ getSnippets, setSnippetEditorOpen, editSnippetData }) {
   const [editorTitle, setEditorTitle] = useState("");
@@ -67,20 +68,28 @@ function SnippetEditor({ getSnippets, setSnippetEditorOpen, editSnippetData }) {
           onChange={(e) => setEditorDescription(e.target.value)}
         />
         <label htmlFor="editor-code">Code</label>
+        <div className="code">
+          <CodeEditor
+            value={editorCode}
+            language="jsx"
+            placeholder="Please enter JS code."
+            padding={15}
+            style={{
+              fontSize: 16,
+              color: "#dddddd",
+              backgroundColor: "#222",
+              fontFamily:
+                "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+            }}
+            onChange={(e) => setEditorCode(e.target.value)}
+          />
+        </div>
         {/* <textarea
           id="editor-code"
           value={editorCode}
           onChange={(e) => setEditorCode(e.target.value)}
         /> */}
-        <CodeMirror
-          id="editor-code"
-          value={editorCode}
-          height="200px"
-          options={{ theme: "dracula", mode: "jsx" }}
-          onChange={(editor) => setEditorCode(editor.getValue())}
-          // onChange={(e) => console.log(e.target.value)}
-          // onChange={(e) => setEditorCode(e.target.value)}
-        />
+
         <button className="btn-save" type="submit">
           Save
         </button>
