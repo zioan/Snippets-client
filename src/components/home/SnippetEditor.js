@@ -5,11 +5,13 @@ import "./SnippetEditor.scss";
 // import CodeMirror from "@uiw/react-codemirror";
 // import "codemirror/theme/dracula.css";
 import CodeEditor from "@uiw/react-textarea-code-editor";
+import ErrorMessage from "../misc/ErrorMessage";
 
 function SnippetEditor({ getSnippets, setSnippetEditorOpen, editSnippetData }) {
   const [editorTitle, setEditorTitle] = useState("");
   const [editorDescription, setEditorDescription] = useState("");
   const [editorCode, setEditorCode] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     if (editSnippetData) {
@@ -30,13 +32,22 @@ function SnippetEditor({ getSnippets, setSnippetEditorOpen, editSnippetData }) {
       code: editorCode ? editorCode : undefined,
     };
 
-    if (!editSnippetData) {
-      await axios.post("http://localhost:5000/snippet/", snippetData);
-    } else {
-      await axios.put(
-        `http://localhost:5000/snippet/${editSnippetData._id}`,
-        snippetData
-      );
+    try {
+      if (!editSnippetData) {
+        await axios.post("http://localhost:5000/snippet/", snippetData);
+      } else {
+        await axios.put(
+          `http://localhost:5000/snippet/${editSnippetData._id}`,
+          snippetData
+        );
+      }
+    } catch (err) {
+      if (err.response) {
+        if (err.response.data.errorMessage) {
+          setErrorMessage(err.response.data.errorMessage);
+        }
+      }
+      return;
     }
 
     getSnippets();
@@ -53,6 +64,12 @@ function SnippetEditor({ getSnippets, setSnippetEditorOpen, editSnippetData }) {
   return (
     <div className="snippet-editor">
       <form onSubmit={saveSnippet}>
+        {errorMessage && (
+          <ErrorMessage
+            message={errorMessage}
+            clear={() => setErrorMessage(null)}
+          />
+        )}
         <label htmlFor="editor-title">Title</label>
         <input
           id="editor-title"

@@ -7,7 +7,12 @@
   justify-content: space-between;
   color: var(--text-light-color);
 
-  a {
+  .btn-logout {
+    @include lnk();
+  }
+
+  a,
+  .btn-logout {
     margin-right: 2rem;
     color: unset;
   }

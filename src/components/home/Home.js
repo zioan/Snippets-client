@@ -1,17 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Snippet from "./Snippet";
 import SnippetEditor from "./SnippetEditor";
 import "./Home.scss";
+import UserContext from "../../context/UserContext";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [snippets, setSnippets] = useState([]);
   const [snippetEditorOpen, setSnippetEditorOpen] = useState(false);
   const [editSnippetData, setEditSnippetData] = useState(null);
 
+  const { user } = useContext(UserContext);
+
   useEffect(() => {
-    getSnippets();
-  }, []);
+    if (!user) {
+      setSnippets([]);
+      return;
+    } else {
+      getSnippets();
+    }
+  }, [user]);
 
   async function getSnippets() {
     const snippetsRes = await axios.get("http://localhost:5000/snippet/");
@@ -44,7 +53,7 @@ function Home() {
 
   return (
     <div className="home">
-      {!snippetEditorOpen && (
+      {!snippetEditorOpen && user && (
         <button
           className="btn-editor-toggler"
           onClick={() => setSnippetEditorOpen(true)}
@@ -59,7 +68,17 @@ function Home() {
           editSnippetData={editSnippetData}
         />
       )}
-      {renderSnippets()}
+      {snippets.length > 0
+        ? renderSnippets()
+        : user && (
+            <p className="no-snippets">No snippets have been added yet!</p>
+          )}
+      {user === null && (
+        <div className="no-user-message">
+          <h2>Welcome to Snippet manager</h2>
+          <Link to="/register">Register here</Link>
+        </div>
+      )}
     </div>
   );
 }
