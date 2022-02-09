@@ -6,8 +6,14 @@ import "./SnippetEditor.scss";
 // import "codemirror/theme/dracula.css";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import ErrorMessage from "../misc/ErrorMessage";
+import domain from "../../util/domain";
 
-function SnippetEditor({ getSnippets, setSnippetEditorOpen, editSnippetData }) {
+function SnippetEditor({
+  getSnippets,
+  setSnippetEditorOpen,
+  editSnippetData,
+  clearEditSnippetData,
+}) {
   const [editorTitle, setEditorTitle] = useState("");
   const [editorDescription, setEditorDescription] = useState("");
   const [editorCode, setEditorCode] = useState("");
@@ -21,6 +27,7 @@ function SnippetEditor({ getSnippets, setSnippetEditorOpen, editSnippetData }) {
       );
       setEditorCode(editSnippetData.code ? editSnippetData.code : "");
     }
+    return !editSnippetData; //cleanup
   }, [editSnippetData]);
 
   async function saveSnippet(e) {
@@ -34,10 +41,10 @@ function SnippetEditor({ getSnippets, setSnippetEditorOpen, editSnippetData }) {
 
     try {
       if (!editSnippetData) {
-        await axios.post("http://localhost:5000/snippet/", snippetData);
+        await axios.post(`${domain}/snippet/`, snippetData);
       } else {
         await axios.put(
-          `http://localhost:5000/snippet/${editSnippetData._id}`,
+          `${domain}/snippet/${editSnippetData._id}`,
           snippetData
         );
       }
@@ -59,17 +66,18 @@ function SnippetEditor({ getSnippets, setSnippetEditorOpen, editSnippetData }) {
     setEditorTitle("");
     setEditorDescription("");
     setEditorCode("");
+    clearEditSnippetData();
   }
 
   return (
     <div className="snippet-editor">
+      {errorMessage && (
+        <ErrorMessage
+          message={errorMessage}
+          clear={() => setErrorMessage(null)}
+        />
+      )}
       <form onSubmit={saveSnippet}>
-        {errorMessage && (
-          <ErrorMessage
-            message={errorMessage}
-            clear={() => setErrorMessage(null)}
-          />
-        )}
         <label htmlFor="editor-title">Title</label>
         <input
           id="editor-title"

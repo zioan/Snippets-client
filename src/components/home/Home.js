@@ -5,6 +5,7 @@ import SnippetEditor from "./SnippetEditor";
 import "./Home.scss";
 import UserContext from "../../context/UserContext";
 import { Link } from "react-router-dom";
+import domain from "../../util/domain";
 
 function Home() {
   const [snippets, setSnippets] = useState([]);
@@ -16,14 +17,13 @@ function Home() {
   useEffect(() => {
     if (!user) {
       setSnippets([]);
-      return;
     } else {
       getSnippets();
     }
   }, [user]);
 
   async function getSnippets() {
-    const snippetsRes = await axios.get("http://localhost:5000/snippet/");
+    const snippetsRes = await axios.get(`${domain}/snippet/`);
     setSnippets(snippetsRes.data);
   }
 
@@ -51,6 +51,10 @@ function Home() {
     });
   }
 
+  function clearEditSnippetData() {
+    setEditSnippetData(null);
+  }
+
   return (
     <div className="home">
       {!snippetEditorOpen && user && (
@@ -65,6 +69,7 @@ function Home() {
         <SnippetEditor
           setSnippetEditorOpen={setSnippetEditorOpen}
           getSnippets={getSnippets}
+          clearEditSnippetData={clearEditSnippetData}
           editSnippetData={editSnippetData}
         />
       )}
