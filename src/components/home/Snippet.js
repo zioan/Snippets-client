@@ -21,14 +21,12 @@ function Snippet({ snippet, getSnippets, editSnippet }) {
       {snippet.code && (
         <div className="code">
           <CodeEditor
+            className="code-editor"
             value={snippet.code}
             language="js"
             placeholder="Please enter your code."
             padding={15}
             style={{
-              fontSize: 16,
-              color: "#dddddd",
-              backgroundColor: "#222",
               fontFamily:
                 "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
             }}

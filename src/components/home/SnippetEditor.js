@@ -95,14 +95,12 @@ function SnippetEditor({
         <label htmlFor="editor-code">Code</label>
         <div className="code">
           <CodeEditor
+            className="code-editor"
             value={editorCode}
             language="jsx"
             placeholder="Please enter JS code."
             padding={15}
             style={{
-              fontSize: 16,
-              color: "#dddddd",
-              backgroundColor: "#222",
               fontFamily:
                 "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
             }}
